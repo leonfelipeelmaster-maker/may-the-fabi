@@ -127,13 +127,15 @@ class GroguState extends ChangeNotifier {
   }
 
   void _checkLevelUp() {
-    if (_xp >= _xpParaSiguienteNivel) {
+    while (_xp >= _xpParaSiguienteNivel) {
       _xp = _xp - _xpParaSiguienteNivel;
       _nivel++;
       _xpParaSiguienteNivel = _nivel <= 10 ? 100 : 150;
       _subioDeNivel = true;
       _mood = GroguMood.muyFeliz;
       _sound.subirNivel();
+    }
+    if (_subioDeNivel) {
       Future.delayed(const Duration(seconds: 5), () {
         _subioDeNivel = false;
         _updateMood();

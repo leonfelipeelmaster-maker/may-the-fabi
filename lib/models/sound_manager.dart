@@ -14,18 +14,20 @@ class SoundManager {
   Timer? _stopTimer;
 
   // Play a sound and auto-stop after [duration] seconds
-Future<void> _playSfx(String fileName, {int? stopAfterSeconds}) async {
-  try {
-    _stopTimer?.cancel();
-    await _sfxPlayer.stop();
-    await _sfxPlayer.play(AssetSource('sounds/$fileName'));
-    if (stopAfterSeconds != null) {
-      _stopTimer = Timer(Duration(seconds: stopAfterSeconds), () async {
-        await _sfxPlayer.stop();
-      });
+  Future<void> _playSfx(String fileName, {int? stopAfterSeconds}) async {
+    try {
+      _stopTimer?.cancel();
+      await _sfxPlayer.stop();
+      await _sfxPlayer.play(AssetSource('sounds/$fileName'));
+      if (stopAfterSeconds != null) {
+        _stopTimer = Timer(Duration(seconds: stopAfterSeconds), () {
+          _sfxPlayer.stop();
+        });
+      }
+    } catch (e) {
+      // Silently fail
     }
-  } catch (e) {}
-}
+  }
 
   Future<void> _playAlert(String fileName, {int? stopAfterSeconds}) async {
     try {

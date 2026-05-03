@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/grogu_state.dart';
 import '../widgets/stats_bar.dart';
-import 'frog_game_screen.dart';
+import 'arcade_menu_screen.dart';
 import 'settings_screen.dart';
 
 class GameScreen extends StatelessWidget {
@@ -54,23 +54,13 @@ class _GameScreenBodyState extends State<_GameScreenBody>
     }
   }
 
-  int? _getMiniGameLevel(int nivel) {
-    if (nivel < 3) return null;
-    return ((nivel - 3) ~/ 3) + 1;
-  }
-
-  void _openFrogGame(BuildContext context, GroguState grogu, int gameLevel) {
+  void _openArcade(BuildContext context, GroguState grogu) {
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) => FrogGameScreen(
-          nivelJuego: gameLevel,
-          onGameOver: (xpGanado) {
-            grogu.ganarXPExterno(xpGanado);
-          },
-        ),
+        pageBuilder: (_, __, ___) => ArcadeMenuScreen(grogu: grogu),
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),
-        transitionDuration: const Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 400),
       ),
     );
   }
@@ -96,7 +86,6 @@ class _GameScreenBodyState extends State<_GameScreenBody>
   Widget build(BuildContext context) {
     final grogu = context.watch<GroguState>();
     _checkLevelUp(grogu);
-    final miniGameLevel = _getMiniGameLevel(grogu.nivel);
 
     return Scaffold(
       body: Container(
@@ -239,47 +228,46 @@ class _GameScreenBodyState extends State<_GameScreenBody>
                     ),
                   ),
 
-                  // Mini game button
-                  if (miniGameLevel != null)
+                  // Arcade button
+                  if (grogu.nivel >= 3)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 4),
                       child: GestureDetector(
-                        onTap: () =>
-                            _openFrogGame(context, grogu, miniGameLevel),
+                        onTap: () => _openArcade(context, grogu),
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               colors: [
-                                Colors.green.shade800,
-                                Colors.green.shade600,
+                                Color(0xFF1a0a3e),
+                                Color(0xFF0d1b4b),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.purpleAccent.withOpacity(0.5),
+                            ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.green.withOpacity(0.3),
+                                color: Colors.purpleAccent.withOpacity(0.2),
                                 blurRadius: 10,
                               ),
                             ],
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(
-                                'assets/images/ui/cute_frog.png',
-                                width: 28,
-                                height: 28,
-                              ),
-                              const SizedBox(width: 8),
+                              Text('🕹️', style: TextStyle(fontSize: 22)),
+                              SizedBox(width: 8),
                               Text(
-                                '🎮 Mini Juego — Nivel $miniGameLevel',
-                                style: const TextStyle(
+                                'Arcade',
+                                style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
                                 ),
                               ),
                             ],
@@ -288,15 +276,15 @@ class _GameScreenBodyState extends State<_GameScreenBody>
                       ),
                     ),
 
-                  // Next unlock hint
+                  // Arcade unlock hint
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2),
                     child: Text(
-                      miniGameLevel == null
-                          ? '🔒 Mini juego se desbloquea en nivel 3'
-                          : grogu.nivel % 3 != 0
-                              ? '⭐ Próximo nivel de juego en nivel ${((grogu.nivel ~/ 3) + 1) * 3}'
-                              : '',
+                      grogu.nivel < 3
+                          ? '🔒 Arcade se desbloquea en nivel 3'
+                          : grogu.nivel < 6
+                              ? '🧱 Tetris disponible en nivel 6'
+                              : '🏆 Todos los juegos desbloqueados',
                       style: const TextStyle(
                         color: Colors.white38,
                         fontSize: 10,
@@ -481,22 +469,24 @@ class _GameScreenBodyState extends State<_GameScreenBody>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (grogu.nivel % 3 == 0)
+                        if (grogu.nivel == 3 || grogu.nivel == 6)
                           Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.2),
+                                color: Colors.purpleAccent.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                    color: Colors.greenAccent.withOpacity(0.5)),
+                                    color: Colors.purpleAccent.withOpacity(0.5)),
                               ),
-                              child: const Text(
-                                '🐸 ¡Nuevo nivel de mini juego desbloqueado!',
-                                style: TextStyle(
-                                  color: Colors.greenAccent,
+                              child: Text(
+                                grogu.nivel == 3
+                                    ? '🕹️ ¡Arcade desbloqueado!'
+                                    : '🧱 ¡Tetris Galáctico desbloqueado!',
+                                style: const TextStyle(
+                                  color: Colors.purpleAccent,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
