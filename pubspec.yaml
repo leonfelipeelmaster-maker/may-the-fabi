@@ -1,0 +1,27 @@
+name: may_the_fabi
+description: May the Fabi be with you - Grogu Tamagotchi
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.2.2
+  audioplayers: ^5.2.1
+  provider: ^6.1.5+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/grogu/
+    - assets/images/ui/
+    - assets/images/intro/
+    - assets/sounds/
