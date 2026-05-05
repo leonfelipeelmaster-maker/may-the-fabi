@@ -313,8 +313,8 @@ class _TetrisGameScreenState extends State<TetrisGameScreen>
   // ─── Timer y velocidad ────────────────────────────────────────────────────
 
   Duration get _tickDuration {
-    // Empieza más lento (900ms), acelera por nivel (mín 150ms)
-    final ms = (900 - (_level - 1) * 60).clamp(150, 900);
+    // Nivel 1: 900ms, sube gradual, mín 200ms en nivel 13+
+    final ms = (900 - (_level - 1) * 50).clamp(200, 900);
     return Duration(milliseconds: ms);
   }
 

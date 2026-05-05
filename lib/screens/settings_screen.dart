@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../models/grogu_state.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -355,6 +357,74 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                       ],
+
+                      const SizedBox(height: 32),
+
+                      // Historial
+                      _sectionTitle('💀 Historial de Grogu'),
+                      const SizedBox(height: 8),
+                      Builder(
+                        builder: (context) {
+                          // Leer del Provider si está disponible, si no de prefs
+                          int muertes = 0;
+                          try {
+                            muertes = context.watch<GroguState>().contadorMuertes;
+                          } catch (_) {}
+                          return Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: muertes == 0
+                                  ? Colors.green.withOpacity(0.08)
+                                  : Colors.red.withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: muertes == 0
+                                    ? Colors.greenAccent.withOpacity(0.3)
+                                    : Colors.redAccent.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  muertes == 0 ? '🌟' : '💀',
+                                  style: const TextStyle(fontSize: 28),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        muertes == 0
+                                            ? '¡Grogu está vivo!'
+                                            : 'Grogu ha muerto $muertes ${muertes == 1 ? 'vez' : 'veces'}',
+                                        style: TextStyle(
+                                          color: muertes == 0
+                                              ? Colors.greenAccent
+                                              : Colors.redAccent,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        muertes == 0
+                                            ? 'Sigue cuidándolo cada día 💚'
+                                            : 'Recuerda cuidarlo todos los días',
+                                        style: const TextStyle(
+                                          color: Colors.white54,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
 
                       const SizedBox(height: 32),
 

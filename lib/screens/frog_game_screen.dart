@@ -74,74 +74,73 @@ class _FrogGameScreenState extends State<FrogGameScreen>
   }
 
   void _setupNivel() {
-    switch (widget.nivelJuego) {
-      case 1:
-        _velocidadBase = 1.5;
-        _maxRanas = 1;
-        _ranasDoradas = false;
-        _ranasFalsas = false;
-        _xpPorRana = 5;
-        _vidasIniciales = 3;
-        _spawnInterval = const Duration(seconds: 3);
-        break;
-      case 2:
-        _velocidadBase = 2.0;
-        _maxRanas = 1;
-        _ranasDoradas = false;
-        _ranasFalsas = false;
-        _xpPorRana = 5;
-        _vidasIniciales = 3;
-        _spawnInterval = const Duration(milliseconds: 2500);
-        break;
-      case 3:
-        _velocidadBase = 2.2;
-        _maxRanas = 2;
-        _ranasDoradas = false;
-        _ranasFalsas = false;
-        _xpPorRana = 8;
-        _vidasIniciales = 3;
-        _spawnInterval = const Duration(milliseconds: 2000);
-        break;
-      case 4:
-        _velocidadBase = 2.5;
-        _maxRanas = 2;
-        _ranasDoradas = true;
-        _ranasFalsas = false;
-        _xpPorRana = 8;
-        _vidasIniciales = 3;
-        _spawnInterval = const Duration(milliseconds: 1800);
-        break;
-      case 5:
-        _velocidadBase = 2.8;
-        _maxRanas = 3;
-        _ranasDoradas = true;
-        _ranasFalsas = false;
-        _xpPorRana = 12;
-        _vidasIniciales = 3;
-        _spawnInterval = const Duration(milliseconds: 1500);
-        break;
-      case 6:
-        _velocidadBase = 3.0;
-        _maxRanas = 3;
-        _ranasDoradas = true;
-        _ranasFalsas = true;
-        _xpPorRana = 12;
-        _vidasIniciales = 3;
-        _spawnInterval = const Duration(milliseconds: 1200);
-        break;
-      default: // nivel 7+
-        _velocidadBase = 3.5;
-        _maxRanas = 4;
-        _ranasDoradas = true;
-        _ranasFalsas = true;
-        _xpPorRana = 20;
-        _vidasIniciales = 2;
-        _spawnInterval = const Duration(milliseconds: 1000);
-        break;
-    }
-    _vidas = _vidasIniciales;
+  switch (widget.nivelJuego) {
+    case 1:
+      _velocidadBase = 0.48; // era 0.8 → -40%
+      _maxRanas = 1;
+      _ranasDoradas = false;
+      _ranasFalsas = false;
+      _xpPorRana = 5;
+      _vidasIniciales = 3;
+      _spawnInterval = const Duration(seconds: 4);
+      break;
+    case 2:
+      _velocidadBase = 0.60; // era 1.0 → -40%
+      _maxRanas = 1;
+      _ranasDoradas = false;
+      _ranasFalsas = false;
+      _xpPorRana = 5;
+      _vidasIniciales = 3;
+      _spawnInterval = const Duration(milliseconds: 3500);
+      break;
+    case 3:
+      _velocidadBase = 0.72; // era 1.2 → -40%
+      _maxRanas = 2;
+      _ranasDoradas = false;
+      _ranasFalsas = false;
+      _xpPorRana = 8;
+      _vidasIniciales = 3;
+      _spawnInterval = const Duration(seconds: 3);
+      break;
+    case 4:
+      _velocidadBase = 0.84; // era 1.4 → -40%
+      _maxRanas = 2;
+      _ranasDoradas = true;
+      _ranasFalsas = false;
+      _xpPorRana = 8;
+      _vidasIniciales = 3;
+      _spawnInterval = const Duration(milliseconds: 2800);
+      break;
+    case 5:
+      _velocidadBase = 0.96; // era 1.6 → -40%
+      _maxRanas = 3;
+      _ranasDoradas = true;
+      _ranasFalsas = false;
+      _xpPorRana = 12;
+      _vidasIniciales = 3;
+      _spawnInterval = const Duration(milliseconds: 2500);
+      break;
+    case 6:
+      _velocidadBase = 1.08; // era 1.8 → -40%
+      _maxRanas = 3;
+      _ranasDoradas = true;
+      _ranasFalsas = true;
+      _xpPorRana = 12;
+      _vidasIniciales = 3;
+      _spawnInterval = const Duration(milliseconds: 2200);
+      break;
+    default:
+      _velocidadBase = 1.20; // era 2.0 → -40%
+      _maxRanas = 4;
+      _ranasDoradas = true;
+      _ranasFalsas = true;
+      _xpPorRana = 20;
+      _vidasIniciales = 2;
+      _spawnInterval = const Duration(milliseconds: 2000);
+      break;
   }
-
+  _vidas = _vidasIniciales;
+}
   void _startCountdown() {
     _countdownController.forward().then((_) {
       if (mounted) {
@@ -195,7 +194,7 @@ class _FrogGameScreenState extends State<FrogGameScreen>
     final isDorada = !isFalsa && _ranasDoradas && _random.nextDouble() < 0.15;
 
     // Speed increases every 10 frogs caught
-    final speedBonus = (_ranasAtrapadas ~/ 10) * 0.2;
+    final speedBonus = (_ranasAtrapadas ~/ 10) * 0.5;
     final speed = (_velocidadBase + speedBonus + _random.nextDouble() * 0.5)
         / 100;
 
